@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class Line {
+/*class Line {
 public:
         Line();
         void add(int);
@@ -26,8 +26,24 @@ void Line::add(int value) {
 }
 
 int Line::get_score() {
-
-}
+        if (line[0] == line[1] + 1 && line[1] == line[2] + 1 && line[2] == line[3] + 1) {
+                if (line[3] == line[4] + 1) return 50;
+                if (line[0] == 13 && line[4] == 1) return 150;
+        }
+        int couple=0;
+        for (int i = 0; i < 4; i++) {
+                for (int j = i + 1; j < 5; j++) {
+                        if (line[i] == line[j]) couple++;
+                        else break;
+                }
+        }
+        if (couple == 1) return 10;
+        if (couple == 2) return 20;
+        if (couple == 3) return 40;
+        if (couple == 4) return (line[0] == 13 && line[2] == 1) ? 100 : 80;
+        if (couple == 6) return (line[4] == 1)? 200 : 160;
+        return 0;
+}*/
 
 class Board {
 public:
@@ -35,9 +51,8 @@ public:
         int get_score();
         bool add(int, int, int);
 private:
-        Line horizontal[5];
-        Line vertical[5];
-        Line diagonal;
+        int get_line_score(int*);
+        int* line_sort(int*);
         int board[5][5];
 };
 
@@ -49,25 +64,54 @@ Board::Board() {
         }
 }
 
+bool Board::add(int value, int x, int y) {
+        if (board[x][y]) return true;
+        else {
+                board[x][y] = value;
+                return false;
+        }
+}
+
+int* Board::line_sort(int* line) {
+        int j;
+        for (int i = 1; i < 5; i++) {
+                int value = line[i];
+                for (j = i - 1; j >= 0 && line[j] < value; j--)
+                        line[j + 1] = line[j];
+                line[j + 1] = value;
+        }
+        return line;
+}
+
 int Board::get_score() {
         int score = 0;
-        score += diagonal.get_score();
+        score += get_line_score(line_sort(new int[5] { board[0][0], board[1][1], board[2][2], board[3][3], board[4][4] }));
         if (score) score += 10;
         for (int i = 0; i < 5; i++) {
-                score += horizontal[i].get_score();
-                score += vertical[i].get_score();
+                score += get_line_score(line_sort(new int[5] { board[i][0], board[i][1], board[i][2], board[i][3], board[i][4] }));
+                score += get_line_score(line_sort(new int[5] { board[0][i], board[1][i], board[2][i], board[3][i], board[4][i] }));
         }
         return score;
 }
 
-bool Board::add(int value, int x, int y) {
-        if (board[x][y]) return false;
-        else {
-                vertical[x].add(value);
-                horizontal[y].add(value);
-                if (x = y) diagonal.add(value);
-                return true;
+int Board::get_line_score(int *line) {
+        if (line[0] == line[1] + 1 && line[1] == line[2] + 1 && line[2] == line[3] + 1) {
+                if (line[3] == line[4] + 1) return 50;
+                if (line[0] == 13 && line[4] == 1) return 150;
         }
+        int couple=0;
+        for (int i = 0; i < 4; i++) {
+                for (int j = i + 1; j < 5; j++) {
+                        if (line[i] == line[j]) couple++;
+                        else break;
+                }
+        }
+        if (couple == 1) return 10;
+        if (couple == 2) return 20;
+        if (couple == 3) return 40;
+        if (couple == 4) return (line[0] == 13 && line[2] == 1) ? 100 : 80;
+        if (couple == 6) return (line[4] == 1)? 200 : 160;
+        return 0;
 }
 
 int *set_deck_of_card();
@@ -77,9 +121,6 @@ int main() {
         setlocale(LC_ALL, "Russian");
         int *cards = new int[25];
         cards = set_deck_of_card();
-        for (int i = 0; i < 25; i++) {
-                cout << cards[i] << " ";
-        }
         system("pause");
         return 0;
 }
