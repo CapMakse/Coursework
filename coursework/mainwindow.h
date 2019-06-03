@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
 #include "player.h"
 
 namespace Ui {
@@ -15,6 +16,7 @@ class MainWindow : public QMainWindow
     int i;
     Player First;
     AI Ai;
+    QPushButton **ai;
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
@@ -22,6 +24,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void AI_buttons();
+    void new_game();
 
 private slots :
     void turn();

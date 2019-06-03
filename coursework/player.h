@@ -7,16 +7,18 @@ public:
     Player();
     int get_score();
     bool add(int, int, int);
-private:
+    void clear();
+protected:
     bool check(int, int);
     int get_line_score(int*);
-    int board[5][5];
+    int **board;
 };
 
 class AI : public Player {
 public:
     AI() : Player() {}
-    void choose_and_add(int);
+    int choose_and_add(int);
+    int choose(int,int,int);
 };
 
 int *set_deck_of_card();

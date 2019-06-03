@@ -2,6 +2,10 @@
 #include "QTime"
 
 Player::Player() {
+    board = new int*[5];
+    for (int i = 0; i < 5; i++) {
+    board[i] = new int[5];
+    }
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
             board[i][j] = 0;
@@ -60,8 +64,46 @@ bool Player::check(int sum, int multiply) {
     return false;
 }
 
-void AI::choose_and_add(int value){
+void Player::clear(){
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            board[i][j] = 0;
+        }
+    }
+}
 
+int AI::choose(int value, int x, int y){
+    if (board[x][y] != 0) return -1;
+    int priority_x = 0, priority_y = 0;
+    for (int i = 0; i < 5; i++) {
+        if (board[x][i] == value) priority_x+=10;
+        if (board[i][y] == value) priority_y+=10;
+    }
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (i != j){
+                if (board[x][i] == value && board[x][j] == value) priority_x+=20;
+                if (board[i][y] == value && board[i][y] == value) priority_y+=20;
+            }
+        }
+    }
+    return priority_x + priority_y + 1;
+}
+
+int AI::choose_and_add(int value){
+    int x = 0, y = 0, priority = 0, buff;
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            buff = choose(value,i,j);
+            if (buff > priority){
+                priority = buff;
+                x = i;
+                y = j;
+            }
+        }
+    }
+    board[x][y] = value;
+    return x + 5 * y;
 }
 
 int *set_deck_of_card() {
