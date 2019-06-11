@@ -33,42 +33,6 @@ void MainWindow::AI_buttons(){
     ai[24] = ui->pushButton_AI24;
 }
 
-void MainWindow::new_game(){
-    First.clear();
-    Ai.clear();
-    for (int i = 0; i < 25; i++) {
-        ai[i]->setText("");
-    }
-    ui->pushButton_p0->setText("");
-    ui->pushButton_p1->setText("");
-    ui->pushButton_p2->setText("");
-    ui->pushButton_p3->setText("");
-    ui->pushButton_p4->setText("");
-    ui->pushButton_p5->setText("");
-    ui->pushButton_p6->setText("");
-    ui->pushButton_p7->setText("");
-    ui->pushButton_p8->setText("");
-    ui->pushButton_p9->setText("");
-    ui->pushButton_p10->setText("");
-    ui->pushButton_p11->setText("");
-    ui->pushButton_p12->setText("");
-    ui->pushButton_p13->setText("");
-    ui->pushButton_p14->setText("");
-    ui->pushButton_p15->setText("");
-    ui->pushButton_p16->setText("");
-    ui->pushButton_p17->setText("");
-    ui->pushButton_p18->setText("");
-    ui->pushButton_p19->setText("");
-    ui->pushButton_p20->setText("");
-    ui->pushButton_p21->setText("");
-    ui->pushButton_p22->setText("");
-    ui->pushButton_p23->setText("");
-    ui->pushButton_p24->setText("");
-    cards = set_deck_of_card();
-    i = 0;
-    ui->label_4->setText(QString::number(cards[i]));
-}
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -113,6 +77,42 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::new_game(){
+    First.clear();
+    Ai.clear();
+    for (int i = 0; i < 25; i++) {
+        ai[i]->setText("");
+    }
+    ui->pushButton_p0->setText("");
+    ui->pushButton_p1->setText("");
+    ui->pushButton_p2->setText("");
+    ui->pushButton_p3->setText("");
+    ui->pushButton_p4->setText("");
+    ui->pushButton_p5->setText("");
+    ui->pushButton_p6->setText("");
+    ui->pushButton_p7->setText("");
+    ui->pushButton_p8->setText("");
+    ui->pushButton_p9->setText("");
+    ui->pushButton_p10->setText("");
+    ui->pushButton_p11->setText("");
+    ui->pushButton_p12->setText("");
+    ui->pushButton_p13->setText("");
+    ui->pushButton_p14->setText("");
+    ui->pushButton_p15->setText("");
+    ui->pushButton_p16->setText("");
+    ui->pushButton_p17->setText("");
+    ui->pushButton_p18->setText("");
+    ui->pushButton_p19->setText("");
+    ui->pushButton_p20->setText("");
+    ui->pushButton_p21->setText("");
+    ui->pushButton_p22->setText("");
+    ui->pushButton_p23->setText("");
+    ui->pushButton_p24->setText("");
+    cards = set_deck_of_card();
+    i = 0;
+    ui->label_4->setText(QString::number(cards[i]));
+}
+
 void MainWindow::turn(){
     QPushButton *button = (QPushButton *)sender();
     QVariant X = button->property("pos-x");
@@ -136,4 +136,17 @@ void MainWindow::turn(){
         if (question == QMessageBox::Yes) new_game();
         else QApplication::quit();
     }
+}
+
+void MainWindow::on_actionNew_game_triggered()
+{
+    QMessageBox::StandardButton question = QMessageBox::question(this, "", "Вы уверены, что хотите начать заново?", QMessageBox::Yes | QMessageBox::No);
+    if (question == QMessageBox::Yes) new_game();
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+
+    QMessageBox::StandardButton question = QMessageBox::question(this, "", "Вы уверены, что хотите выйти?", QMessageBox::Yes | QMessageBox::No);
+    if (question == QMessageBox::Yes) QApplication::quit();
 }
