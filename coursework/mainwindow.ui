@@ -3771,21 +3771,27 @@ border: 3px solid black;
    </property>
    <widget class="QMenu" name="menuGame">
     <property name="title">
-     <string>Game</string>
+     <string>Игра</string>
     </property>
     <addaction name="actionNew_game"/>
+    <addaction name="action"/>
     <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuGame"/>
   </widget>
   <action name="actionNew_game">
    <property name="text">
-    <string>New game</string>
+    <string>Новая игра</string>
    </property>
   </action>
   <action name="actionQuit">
    <property name="text">
-    <string>Quit</string>
+    <string>Выход</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>Правила</string>
    </property>
   </action>
  </widget>

@@ -74,7 +74,7 @@ void Player::clear(){
 
 int AI::choose(int value, int x, int y){
     if (board[x][y] != 0) return -1;
-    int priority = 5;
+    int priority = 100;
     for (int i = 0; i < 5; i++) {
         if (board[x][i] == value) priority+=10;
         if (board[i][y] == value) priority+=100;
@@ -89,15 +89,24 @@ int AI::choose(int value, int x, int y){
     }
     for (int i = 0; i < 5; i++) {
         if (board[i][y] == 0) {
-            priority-=2;
+            priority-=5;
             break;
         }
     }
     for (int i = 0; i < 5; i++) {
-        if (board[x][i] == 0 || abs(board[x][i] - value) < 5) priority+=10;
+        if (board[x][i] == 0 || abs(board[x][i] - value) < 5) priority+=20;
         else {
-            priority-=i*10 + 1;
+            priority-=i*20;
             break;
+        }
+    }
+    if (value > 9 ||  value == 1){
+        for (int i = 0; i < 5; i++) {
+            if (board[x][i] == 0 || board[x][i] != value) priority+=30;
+            else {
+                priority-=i*30;
+                break;
+            }
         }
     }
     return priority;

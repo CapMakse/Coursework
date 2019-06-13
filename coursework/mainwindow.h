@@ -31,6 +31,7 @@ private slots :
     void turn();
     void on_actionNew_game_triggered();
     void on_actionQuit_triggered();
+    void on_action_triggered();
 };
 
 #endif // MAINWINDOW_H
