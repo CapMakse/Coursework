@@ -2,7 +2,8 @@
 #include "ui_mainwindow.h"
 #include "player.h"
 #include <QMessageBox>
-#include <QDebug>
+#include <QFile>
+#include <QTextStream>
 
 void MainWindow::AI_buttons(){
     ai = new QPushButton*[25];
@@ -111,6 +112,8 @@ void MainWindow::new_game(){
     cards = set_deck_of_card();
     i = 0;
     ui->label_4->setText(QString::number(cards[i]));
+    ui->label->setText("Игрок 0");
+    ui->label_2->setText("Компьютер 0");
 }
 
 void MainWindow::turn(){
@@ -121,20 +124,36 @@ void MainWindow::turn(){
     button->setText(QString::number(cards[i]));
     ai[Ai.choose_and_add(cards[i])]->setText(QString::number(cards[i]));
     i++;
+    int P_score = First.get_score();
+    int Ai_score = Ai.get_score();
+    ui->label->setText("Игрок " + QString::number(P_score));
+    ui->label_2->setText("Компьютер " + QString::number(Ai_score));
     if (i < 25 ) ui->label_4->setText(QString::number(cards[i]));
     else {
         ui->label_4->setText("");
-        int P_score = First.get_score();
-        int Ai_score = Ai.get_score();
         QString str;
         if (P_score < Ai_score) {
             str = "Вы проиграли. \nЖелаете повторить?"; }
         else if (P_score > Ai_score) {
             str = "Вы победили. \nЖелаете повторить?"; }
         else { str = "Ничья. \nЖелаете повторить?"; }
-        QMessageBox::StandardButton question = QMessageBox::question(this, "", str, QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton question = QMessageBox::question(this, "", "Желаете сохранить результат?", QMessageBox::Yes | QMessageBox::No);
+        if (question == QMessageBox::Yes){
+            save(P_score,Ai_score);
+        }
+        question = QMessageBox::question(this, "", str, QMessageBox::Yes | QMessageBox::No);
         if (question == QMessageBox::Yes) new_game();
         else QApplication::quit();
+    }
+}
+
+void MainWindow::save(int P_s, int Ai_s){
+    QFile file("save.txt");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream write(&file);
+        write << "Player has " << QString::number(P_s) << " score\n\n" << First.get_board();
+        write << "Computer has " << QString::number(Ai_s) << " score\n\n" << Ai.get_board();
+        file.close();
     }
 }
 

@@ -26,6 +26,7 @@ private:
     Ui::MainWindow *ui;
     void AI_buttons();
     void new_game();
+    void save(int,int);
 
 private slots :
     void turn();

@@ -1,6 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-
+#include <QString>
 
 class Player {
 public:
@@ -8,6 +8,7 @@ public:
     int get_score();
     bool add(int, int, int);
     void clear();
+    QString get_board();
 protected:
     bool check(int, int);
     int get_line_score(int*);

@@ -1,5 +1,6 @@
 #include "player.h"
 #include "QTime"
+#include <QString>
 
 Player::Player() {
     board = new int*[5];
@@ -40,7 +41,7 @@ int Player::get_line_score(int *line) {
     int couple=0;
     for (int i = 0; i < 4; i++) {
         for (int j = i + 1; j < 5; j++) {
-            if (line[i] == line[j]) couple++;
+            if (line[i] == line[j] && line[i] != 0) couple++;
         }
     }
     if (couple == 1) return 10;
@@ -72,11 +73,22 @@ void Player::clear(){
     }
 }
 
+QString Player::get_board(){
+    QString result = "";
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            result += QString::number(board[j][i]) + " ";
+        }
+        result += "\n\n";
+    }
+    return result;
+}
+
 int AI::choose(int value, int x, int y){
     if (board[x][y] != 0) return -1;
     int priority = 100;
     for (int i = 0; i < 5; i++) {
-        if (board[x][i] == value) priority+=10;
+        if (board[x][i] == value) priority+=20;
         if (board[i][y] == value) priority+=100;
     }
     for (int i = 0; i < 5; i++) {
@@ -88,25 +100,18 @@ int AI::choose(int value, int x, int y){
         }
     }
     for (int i = 0; i < 5; i++) {
-        if (board[i][y] == 0) {
-            priority-=5;
-            break;
-        }
-    }
-    for (int i = 0; i < 5; i++) {
         if (board[x][i] == 0 || abs(board[x][i] - value) < 5) priority+=20;
         else {
             priority-=i*20;
             break;
         }
     }
-    if (value > 9 ||  value == 1){
-        for (int i = 0; i < 5; i++) {
-            if (board[x][i] == 0 || board[x][i] != value) priority+=30;
-            else {
-                priority-=i*30;
-                break;
-            }
+    if (value > 9 || value == 1)
+    for (int i = 0; i < 5; i++) {
+        if (board[x][i] == 0 || (board[x][i] != value && (board[x][i] > 9 || board[x][i] == 1))) priority+=30;
+        else {
+            priority-=i*30;
+            break;
         }
     }
     return priority;
